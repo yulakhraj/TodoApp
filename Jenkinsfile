@@ -16,24 +16,23 @@ pipeline {
         
         stage('Unit Tests') {
             steps {
-                bat 'mvn test -Dmaven.test.failure.ignore=true'
+                bat 'mvn clean test -Dmaven.test.failure.ignore=true'
             }
             post {
                 always {
-                    junit allowEmptyResults: true, testResults: '**/target/surefire-reports/TEST-*.xml'
+                    junit(
+                        allowEmptyResults: true,
+                        testResults: 'target/surefire-reports/*.xml',
+                        skipPublishingChecks: true
+                    )
                 }
             }
         }
         
         stage('SonarQube Analysis') {
-            environment {
-                SCANNER_HOME = tool 'SonarQubeScanner'
-            }
             steps {
                 withSonarQubeEnv('SonarQube') {
-                    bat '''
-                        %SCANNER_HOME%\\bin\\sonar-scanner -Dsonar.projectKey=TodoWebApp 
-                    '''
+                    bat 'mvn clean verify sonar:sonar -Dsonar.projectKey=TodoWebApp -Dsonar.host.url=http://localhost:9090'
                 }
                 timeout(time: 2, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
@@ -43,11 +42,15 @@ pipeline {
         
         stage('Integration Tests') {
             steps {
-                bat 'mvn integration-test -Dmaven.test.failure.ignore=true'
+                bat 'mvn verify -Dmaven.test.failure.ignore=true'
             }
             post {
                 always {
-                    junit allowEmptyResults: true, testResults: '**/target/failsafe-reports/TEST-*.xml'
+                    junit(
+                        allowEmptyResults: true,
+                        testResults: 'target/failsafe-reports/*.xml',
+                        skipPublishingChecks: true
+                    )
                 }
             }
         }
