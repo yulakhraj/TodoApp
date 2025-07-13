@@ -1,0 +1,52 @@
+# Set default behavior to automatically normalize line endings
+* text=auto
+
+# Force batch scripts to always use CRLF line endings
+*.{cmd,[cC][mM][dD]} text eol=crlf
+*.{bat,[bB][aA][tT]} text eol=crlf
+
+# Force bash scripts to always use LF line endings
+*.sh text eol=lf
+
+# Java source files
+*.java text
+*.jsp text
+*.jspf text
+*.jspx text
+*.properties text
+*.xml text
+*.yml text
+*.yaml text
+*.md text
+
+# Documentation
+*.txt text
+*.md text
+README text
+LICENSE text
+
+# Maven
+pom.xml text
+
+# Web
+*.html text
+*.css text
+*.js text
+*.json text
+
+# These files are binary and should be left untouched
+# (binary is a macro for -text -diff)
+*.class binary
+*.jar binary
+*.war binary
+*.ear binary
+*.zip binary
+*.tar binary
+*.gz binary
+*.rar binary
+*.dll binary
+*.exe binary
+*.pdf binary
+*.jpg binary
+*.png binary
+*.gif binary
