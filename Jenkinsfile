@@ -70,7 +70,7 @@ pipeline {
                     def server = Artifactory.server('Artifactory') // Use your Artifactory server ID
                     def buildInfo = Artifactory.newBuildInfo()
                     def rtMaven = Artifactory.newMavenBuild()
-                    rtMaven.resolver server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
+                    rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
                     rtMaven.deployer server: server, releaseRepo: 'libs-release-local', snapshotRepo: 'libs-snapshot-local'
                     rtMaven.run pom: 'pom.xml', goals: 'deploy', buildInfo: buildInfo
                     server.publishBuildInfo buildInfo
