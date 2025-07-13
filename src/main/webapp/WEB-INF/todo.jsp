@@ -1,3 +1,4 @@
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -83,13 +84,21 @@
             <button type="submit">Add</button>
         </form>
         <ul>
-            <c:forEach var="todo" items="${todos}">
+            <c:forEach var="todo" items="${todos}" varStatus="status">
                 <li>
                     <span>${todo.task}</span>
-                    <button class="view-btn" onclick="alert('View: ${todo.task}')">View</button>
+                    <button class="view-btn" type="button" data-task="${fn:escapeXml(todo.task)}" onclick="showTodoDetail(this.getAttribute('data-task'))">View</button>
                 </li>
             </c:forEach>
         </ul>
+        <div id="todo-detail" style="display:none; margin-top:2rem; padding:1rem; background:#eaf1fb; border-radius:8px; text-align:left;"></div>
     </div>
+    <script>
+        function showTodoDetail(task) {
+            var detailDiv = document.getElementById('todo-detail');
+            detailDiv.style.display = 'block';
+            detailDiv.innerHTML = '<strong>Todo Details:</strong><br><span>' + task + '</span>';
+        }
+    </script>
 </body>
 </html>
