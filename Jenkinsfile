@@ -77,6 +77,18 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to Tomcat') {
+            steps {
+                deploy adapters: [
+                    tomcat9(credentialsId: 'TOMCAT-Token', 
+                            path: '/todowebapp', 
+                            url: 'http://localhost:8085/')
+                ], 
+                contextPath: 'todowebapp', 
+                war: '**/target/*.war'
+            }
+        }
     }
     
     post {
