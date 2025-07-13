@@ -82,10 +82,10 @@ pipeline {
             steps {
                 deploy adapters: [
                     tomcat9(credentialsId: 'TOMCAT-Token', 
-                            path: '/todowebapp', 
+                            path: 'TodoWebApp-1.0-SNAPSHOT', 
                             url: 'http://localhost:8085/')
                 ], 
-                contextPath: 'todowebapp', 
+                contextPath: 'TodoWebApp-1.0-SNAPSHOT', 
                 war: '**/target/*.war'
             }
         }
