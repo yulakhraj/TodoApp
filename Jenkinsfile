@@ -1,19 +1,19 @@
 pipeline {
     agent any
-    
+
     stages {
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
-        
+
         stage('Build') {
             steps {
                 bat 'mvn clean compile'
             }
         }
-        
+
         stage('Unit Tests') {
             steps {
                 bat 'mvn clean test -Dmaven.test.failure.ignore=true'
@@ -28,7 +28,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('SonarQube Analysis') {
             steps {
                 withSonarQubeEnv(installationName: 'sonarqube') {
@@ -37,7 +37,7 @@ pipeline {
                 echo 'SonarQube Analysis completed. Check results at http://localhost:9090/dashboard?id=TodoWebApp'
             }
         }
-        
+
         stage('Integration Tests') {
             steps {
                 bat 'mvn verify -Dmaven.test.failure.ignore=true'
@@ -52,7 +52,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage('Package') {
             steps {
                 bat 'mvn package -DskipTests'
@@ -81,16 +81,18 @@ pipeline {
         stage('Deploy to Tomcat') {
             steps {
                 deploy adapters: [
-                    tomcat9(credentialsId: 'TOMCAT-Token', 
-                            path: 'TodoWebApp-1.0-SNAPSHOT', 
-                            url: 'http://localhost:8085/')
-                ], 
-                contextPath: 'TodoWebApp-1.0-SNAPSHOT', 
+                    tomcat9(
+                        credentialsId: 'TOMCAT-Token',
+                        path: '',
+                        url: 'http://localhost:8085/'
+                    )
+                ],
+                contextPath: '',
                 war: '**/target/*.war'
             }
         }
     }
-    
+
     post {
         always {
             cleanWs()
