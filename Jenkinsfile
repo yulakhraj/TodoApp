@@ -31,8 +31,14 @@ pipeline {
         
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
-                    bat 'mvn clean verify sonar:sonar -Dsonar.projectKey=TodoWebApp -Dsonar.host.url=http://localhost:9090'
+                withSonarQubeEnv(installationName: 'sonarqube') {
+                    bat '''
+                        mvn clean verify sonar:sonar \
+                        -Dsonar.projectKey=TodoWebApp \
+                        -Dsonar.projectName=TodoWebApp \
+                        -Dsonar.host.url=http://localhost:9090 \
+                        -Dsonar.login=${SONAR_AUTH_TOKEN}
+                    '''
                 }
                 timeout(time: 2, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
