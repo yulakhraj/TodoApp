@@ -25,6 +25,22 @@ pipeline {
             }
         }
         
+        stage('SonarQube Analysis') {
+            environment {
+                SCANNER_HOME = tool 'SonarQubeScanner'
+            }
+            steps {
+                withSonarQubeEnv('SonarQube') {
+                    bat '''
+                        %SCANNER_HOME%\\bin\\sonar-scanner -Dsonar.projectKey=TodoWebApp 
+                    '''
+                }
+                timeout(time: 2, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+        
         stage('Integration Tests') {
             steps {
                 bat 'mvn integration-test -Dmaven.test.failure.ignore=true'
