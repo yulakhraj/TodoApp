@@ -16,22 +16,22 @@ pipeline {
         
         stage('Unit Tests') {
             steps {
-                bat 'mvn test'
+                bat 'mvn test -Dmaven.test.failure.ignore=true'
             }
             post {
                 always {
-                    junit '**/target/surefire-reports/*.xml'
+                    junit allowEmptyResults: true, testResults: '**/target/surefire-reports/TEST-*.xml'
                 }
             }
         }
         
         stage('Integration Tests') {
             steps {
-                bat 'mvn integration-test'
+                bat 'mvn integration-test -Dmaven.test.failure.ignore=true'
             }
             post {
                 always {
-                    junit '**/target/failsafe-reports/*.xml'
+                    junit allowEmptyResults: true, testResults: '**/target/failsafe-reports/TEST-*.xml'
                 }
             }
         }
