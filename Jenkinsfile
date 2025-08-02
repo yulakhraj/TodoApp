@@ -67,7 +67,7 @@ pipeline {
         stage('Deploy to Artifactory') {
             steps {
                 script {
-                    def server = Artifactory.server('JFrogArtifactory') // Use your Artifactory server ID
+                    def server = Artifactory.server('Artifactory') // Use your Artifactory server ID
                     def buildInfo = Artifactory.newBuildInfo()
                     def rtMaven = Artifactory.newMavenBuild()
                     rtMaven.resolver server: server, releaseRepo: 'libs-release', snapshotRepo: 'libs-snapshot'
